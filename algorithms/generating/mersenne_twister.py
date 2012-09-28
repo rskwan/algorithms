@@ -1,5 +1,4 @@
 """
-
     mersenne_twister.py
     This module implements the Mersenne twister algorithm.
 
@@ -10,7 +9,7 @@
     Pre: nothing
     Post: returns a generated number
     Time Complexity: 1
-    Psuedo Code: http://en.wikipedia.org/wiki/Mersenne_twister
+    Psuedocode: http://en.wikipedia.org/wiki/Mersenne_twister
 
     mersenne_twister.extract_number() -> randnum
 
@@ -26,7 +25,7 @@ def init_generator(seed, gen):
             gen[i] = seed & mask
         else:
             gen[i] = (1812433253 * (gen[i - 1] ^ (gen[i - 1] >> 30)) + i)
-            gen[i] = gen[i] & mask
+            gen[i] &= mask
 
 def extract_number():
     global index
@@ -37,10 +36,10 @@ def extract_number():
     if index == 0:
         generate_numbers(twister)
     y = twister[index]
-    y = y ^ (y >> 11)
-    y = y ^ ((y << 7) & 2636928640)
-    y = y ^ ((y << 15) & 4022730752)
-    y = y ^ (y >> 18)
+    y ^= y >> 11
+    y ^= (y << 7) & 2636928640
+    y ^= (y << 15) & 4022730752
+    y ^= y >> 18
     index = (index + 1) % 624
     return y
 
@@ -51,4 +50,4 @@ def generate_numbers(gen):
         y = (gen[i] & umask) | (gen[(i + 1) % 624] & lmask)
         gen[i] = gen[(i + 397) % 624] ^ (y >> 1)
         if y % 2 != 0:
-            gen[i] = gen[i] ^ 2567483615
+            gen[i] ^= 2567483615
