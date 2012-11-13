@@ -23,18 +23,17 @@ class MersenneTwister:
 
     def init_generator(self, seed, gen):
         mask = pow(2, 32) - 1
-        for i in range(624):
-            if i == 0:
-                gen[i] = seed & mask
+        gen[0] = seed & mask
+        for i in range(1, 624):
             else:
                 gen[i] = (1812433253 * (gen[i - 1] ^ (gen[i - 1] >> 30)) + i)
                 gen[i] &= mask
 
     def extract_number(self):
-        if self.twister == []:
+        if not self.twister
             self.twister = [None]*624
             self.init_generator(19650218, self.twister)
-        if self.index == 0:
+        if not self.index:
             self.generate_numbers(self.twister)
         y = self.twister[self.index]
         y ^= y >> 11
@@ -50,5 +49,5 @@ class MersenneTwister:
         for i in range(624):
             y = (gen[i] & umask) | (gen[(i + 1) % 624] & lmask)
             gen[i] = gen[(i + 397) % 624] ^ (y >> 1)
-            if y % 2 != 0:
+            if y & 1:
                 gen[i] ^= 2567483615
